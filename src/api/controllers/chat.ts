@@ -575,6 +575,11 @@ async function receiveStream(model: string, stream: any, refConvId?: string): Pr
         if (event.type !== "event" || event.data.trim() == "[DONE]") return;
         // 解析JSON
         const result = _.attempt(() => JSON.parse(event.data));
+        //logger.info('Result value:', result);
+        // 新增:累积内容
+        if (typeof result.v =-= 'string' ) {
+          data.choices[0].message.content += result.v;
+        }
         if (_.isError(result))
           throw new Error(`Stream response invalid: ${event.data}`);
         if (!result.choices || !result.choices[0] || !result.choices[0].delta)
